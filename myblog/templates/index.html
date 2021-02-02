@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第一个页面</title>
+    <link rel="stylesheet" href="/static/css/mystyle.css">
+    <script src="/static/js/vue.js"></script>
+    <script src="/static/js/axios.js"></script>
+</head>
+
+<body>
+    <div id="home">
+        <div class="header">
+            <h1>{{ siteInfo.title }}</h1>
+            <img src="/upload/{{siteInfo.logo}}" alt="">
+        </div>
+        <hr/>
+        <div class="content">
+            <!-- 导航栏 -->
+            <div class="menu">
+                <!-- django中的for循环,记好 -->
+                {% for class in classes %}
+                <div class="item">
+                    <a href="/classes">{{class.text}}</a>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- 用户列表 -->
+            <div class="userlist">
+                全部用户
+                <hr> {% if userlist %} {% for user in userlist %}
+                <div class="user">
+                    <img src="/static/admin.jpg" alt="">
+                    <p>{{ user.nickName}}</p>
+                </div>
+                {% endfor %} {% else %}
+                <p>没有用户</p>
+                {% endif %}
+
+            </div>
+        </div>
+        <hr/>
+        <div class="foot">
+            Copyright@ 2020Dweb工作室
+        </div>
+    </div>
+
+    <script>
+        // 首先梳理工作流程
+        // new Vue({
+        //     el: '#home',
+        //     data: {
+        //         apiurl: "https://api.dweb.club/",
+        //         movies: []
+        //     },
+        //     methods: {
+        //         getData() {
+        //             var self = this
+        //                 // 缓存vue实例
+        //             axios({
+        //                 method: 'get',
+        //                 type: 'json',
+        //                 url: 'https://api.dweb.club/dweb-api/get-index-data/'
+        //             }).then(function(res) {
+        //                 self.movies = res.data.newsdata
+        //             })
+        //         }
+        //     }
+        // })
+    </script>
+</body>
+
+</html>
