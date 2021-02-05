@@ -21,24 +21,24 @@
             <!-- 导航栏 -->
             <div class="menu">
                 <!-- django中的for循环,记好 -->
-                {% for class in classes %}
-                <div class="item">
-                    <a href="/classes">{{class.text}}</a>
+                <div v-if="item.id==choosed" v-for="item in classes" class="item" style="background:#777;color: #fff">
+                    <!--  路由传参的本质在这里,a标签对应浏览器的url,传入一个id参数-->
+                    <a>[[item.text]]</a>
                 </div>
-                {% endfor %}
+                <div v-else class="item" v-on:click="chooseClass(item.id)">
+                    <!--  在前后端不分离中。路由传参的本质是,a标签对应浏览器的url,传入一个id参数-->
+                    <a>[[item.text]]</a>
+                </div>
             </div>
             <!-- 用户列表 -->
-            <div class="userlist">
-                全部用户
-                <hr> {% if userlist %} {% for user in userlist %}
-                <div class="user">
+            <div v-if="item.id==choosed" v-for="item in classes" class="userlist">
+                <p>[[item.text]]</p>
+                <hr>
+                <div v-if="item.userlist.length>0" v-for="user in item.userlist" class="user">
                     <img src="/static/admin.jpg" alt="">
-                    <p>{{ user.nickName}}</p>
+                    <p>[[user.nickName]]</p>
                 </div>
-                {% endfor %} {% else %}
-                <p>没有用户</p>
-                {% endif %}
-
+                <p v-else>没有用户</p>
             </div>
         </div>
         <hr/>
@@ -48,27 +48,33 @@
     </div>
 
     <script>
-        // 首先梳理工作流程
-        // new Vue({
-        //     el: '#home',
-        //     data: {
-        //         apiurl: "https://api.dweb.club/",
-        //         movies: []
-        //     },
-        //     methods: {
-        //         getData() {
-        //             var self = this
-        //                 // 缓存vue实例
-        //             axios({
-        //                 method: 'get',
-        //                 type: 'json',
-        //                 url: 'https://api.dweb.club/dweb-api/get-index-data/'
-        //             }).then(function(res) {
-        //                 self.movies = res.data.newsdata
-        //             })
-        //         }
-        //     }
-        // })
+        new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#home',
+            data: {
+                choosed: 1,
+                classes: []
+            },
+            mounted() {
+                this.getdata()
+            },
+            methods: {
+                getdata() {
+                    axios({
+                        url: '/api/',
+                        type: 'json',
+                        method: 'get'
+                    }).then(res => {
+                        this.classes = res.data.classes
+                            // console.log(this.classes)
+                    })
+                },
+                chooseClass(id) {
+                    this.choosed = id
+                }
+
+            }
+        })
     </script>
 </body>
 
