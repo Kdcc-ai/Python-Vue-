@@ -77,6 +77,7 @@ def getMunuList(request):
     }
     site_data = []
     site_data.append(data_site)
+
     data = {
         'menu_data': menu_data,
         'site_data': site_data
@@ -86,12 +87,17 @@ def getMunuList(request):
 # 获取对应课程id的学生信息
 
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE'])
 def getUserList(request):
+    if (request.method == 'DELETE'):
+        user_id = request.POST['id']
+        deleteUser = UserInfo.objects.get(id=user_id)
+        deleteUser.delete()
+        return Response('ok')
     # 获取的原始班级数据
     menuId = request.GET['id']
     menu = Classes.objects.get(id=menuId)
-
+    # 通过一对多关系得到对应课程的用户表
     userlist = UserInfo.objects.filter(belong=menu)
 
     # 整理数据为json
@@ -120,8 +126,15 @@ def toLogin(request):
         if auth_pwd:
             token = Token.objects.update_or_create(user=user[0])
             token = Token.objects.get(user=user[0])
+            #  通过一对一关系得到对应的用户
+            userinfo = UserInfo.objects.get(belong_user=user[0])
             data = {
-                'token': token.key
+                'token': token.key,
+                'userinfo': {
+                    'id': userinfo.id,
+                    'nickName': userinfo.nickName,
+                    'headImg': str(userinfo.headImg)
+                }
             }
             return Response(data)
         else:
