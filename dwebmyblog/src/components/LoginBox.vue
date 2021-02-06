@@ -91,7 +91,10 @@ export default {
           })
         }).then(res => {
           if (res.data == "ok") {
-            window.location.reload();
+            this.$emit("childEvent");
+            // var userinfo = res.data.userinfo;
+            // window.location.reload();
+            // this.$store.commit("editUserinfo", userinfo);
           }
         });
       } else {
@@ -130,6 +133,7 @@ export default {
               var userinfo = res.data.userinfo;
               this.$store.commit("editUserinfo", userinfo);
               alert("登录成功");
+              this.$emit("childEvent");
               if (this.$route.path != "/userinfo") {
                 this.$router.push({ path: "/userinfo" });
               }
@@ -140,7 +144,6 @@ export default {
       } else {
         alert("用户名或密码为空");
       }
-      this.$emit("childEvent");
     },
     //注册
     toRegistor() {
@@ -169,6 +172,7 @@ export default {
                 break;
               case "ok":
                 alert("注册成功");
+                this.$emit("childEvent");
                 break;
             }
           });
@@ -176,7 +180,6 @@ export default {
       } else {
         alert("输入存在空值");
       }
-      this.$emit("childEvent");
     }
   }
 };

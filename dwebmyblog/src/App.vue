@@ -9,6 +9,7 @@
       <h1>{{siteDate[0].title}}</h1>
       <img :src="siteDate[0].logo " />
     </div>
+    <Test></Test>
     <hr />
     <div class="content">
       <!-- 导航栏 -->
@@ -37,9 +38,11 @@
 <script>
 import axios from "axios";
 import LoginBox from "../src/components/LoginBox.vue";
+import Test from "../src/components/Test.vue";
 export default {
   components: {
-    LoginBox
+    LoginBox,
+    Test
   },
   data() {
     return {
@@ -103,6 +106,7 @@ export default {
     },
     parentMethod() {
       this.boxtarget = 0;
+      this.loginType = true;
     }
   }
 };

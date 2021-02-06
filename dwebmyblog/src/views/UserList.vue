@@ -21,6 +21,7 @@ export default {
   //用户在看到页面之前,最后vue提供的一次函数执行
   mounted() {
     this.getUserList(this.menuId);
+    this.$emit("childEvent");
   },
   watch: {
     $route(to) {
